@@ -1,0 +1,15 @@
+<div class="container">
+    <a routerLink="/reservations" class="nav-link">Ver minhas reservas</a>
+    <h1>Hotéis Disponíveis</h1>
+  
+    <div class="hotel-card" *ngFor="let hotel of hotels">
+      <div class="hotel-info">
+        <h2>{{ hotel.name }}</h2>
+        <p>{{ hotel.city }} - {{ hotel.state }}</p>
+      </div>
+      <div>
+        <p class="hotel-price">R$ {{ hotel.pricePerNight }}/noite</p>
+        <button (click)="reserve(hotel.id)">Reservar</button>
+      </div>
+    </div>
+  </div>

@@ -1,0 +1,34 @@
+<div class="container">
+    <h1>Nova Reserva</h1>
+  
+    <div class="hotel-summary" *ngIf="hotel">
+      <h2>{{ hotel.name }} — {{ hotel.city }}/{{ hotel.state }}</h2>
+      <p>R$ {{ hotel.pricePerNight }}/noite</p>
+    </div>
+  
+    <form (ngSubmit)="submit()">
+      <div class="form-group">
+        <label>Nome do hóspede</label>
+        <input type="text" [(ngModel)]="guestName" name="guestName" required />
+      </div>
+  
+      <div class="form-group">
+        <label>Check-in</label>
+        <input type="date" [(ngModel)]="checkIn" name="checkIn" required />
+      </div>
+  
+      <div class="form-group">
+        <label>Check-out</label>
+        <input type="date" [(ngModel)]="checkOut" name="checkOut" required />
+      </div>
+  
+      <div class="total" *ngIf="totalPrice > 0">
+        Total: R$ {{ totalPrice }}
+      </div>
+  
+      <div class="actions">
+        <button type="submit">Confirmar Reserva</button>
+        <button type="button" class="btn-secondary" (click)="voltar()">Voltar</button>
+      </div>
+    </form>
+  </div>

@@ -1,0 +1,32 @@
+.hotel-card {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .hotel-info h2 {
+    margin-bottom: 4px;
+  }
+  
+  .hotel-info p {
+    color: #666;
+    font-size: 0.9rem;
+  }
+  
+  .hotel-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #4361ee;
+    margin-bottom: 12px;
+    text-align: right;
+  }
+  
+  .nav-link {
+    display: inline-block;
+    margin-bottom: 20px;
+  }
