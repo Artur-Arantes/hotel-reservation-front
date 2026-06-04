@@ -1,21 +1,22 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Hotel } from '../models/hotel.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Hotel, HotelPage } from '../models/hotel.model';
 
 @Injectable({ providedIn: 'root' })
 export class HotelService {
 
-  private hotels: Hotel[] = [
-    { id: 1, name: 'Hotel Atlântico', city: 'Rio de Janeiro', state: 'RJ', pricePerNight: 350 },
-    { id: 2, name: 'Hotel Serra Verde', city: 'Gramado', state: 'RS', pricePerNight: 520 },
-    { id: 3, name: 'Hotel Paulista', city: 'São Paulo', state: 'SP', pricePerNight: 290 },
-  ];
+  private readonly apiUrl = `${environment.apiUrl}/api/hotels`;
 
-  getAll(): Observable<Hotel[]> {
-    return of(this.hotels);
+  constructor(private http: HttpClient) {}
+
+  getAll(page = 0, size = 10): Observable<HotelPage> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<HotelPage>(this.apiUrl, { params });
   }
 
-  getById(id: number): Observable<Hotel | undefined> {
-    return of(this.hotels.find(h => h.id === id));
+  getById(id: number): Observable<Hotel> {
+    return this.http.get<Hotel>(`${this.apiUrl}/${id}`);
   }
 }

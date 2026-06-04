@@ -1,0 +1,44 @@
+<div class="container">
+  <button class="btn-back" (click)="voltar()">← Voltar</button>
+
+  <div *ngIf="hotel">
+    <h1>{{ hotel.name }}</h1>
+    <p class="hotel-location">{{ hotel.city }} - {{ hotel.state }}</p>
+  </div>
+
+  <div class="search-box">
+    <h2>Verificar disponibilidade</h2>
+    <div class="date-row">
+      <div class="form-group">
+        <label>Check-in</label>
+        <input type="date" [(ngModel)]="checkIn" name="checkIn" />
+      </div>
+      <div class="form-group">
+        <label>Check-out</label>
+        <input type="date" [(ngModel)]="checkOut" name="checkOut" />
+      </div>
+      <button (click)="search()" [disabled]="!checkIn || !checkOut || loading">
+        {{ loading ? 'Buscando...' : 'Buscar' }}
+      </button>
+    </div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  </div>
+
+  <div *ngIf="searched">
+    <div class="empty-state" *ngIf="rooms.length === 0">
+      <p>Nenhum quarto disponível para o período selecionado.</p>
+    </div>
+
+    <div class="room-card" *ngFor="let room of rooms">
+      <div class="room-info">
+        <h3>Quarto {{ room.roomNumber }}</h3>
+        <p>Tipo: <strong>{{ room.type }}</strong></p>
+        <p>Capacidade: <strong>{{ room.capacity }} pessoa(s)</strong></p>
+      </div>
+      <div class="room-action">
+        <p class="room-price">R$ {{ room.price }}/noite</p>
+        <button (click)="reserve(room)">Reservar</button>
+      </div>
+    </div>
+  </div>
+</div>

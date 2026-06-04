@@ -13,12 +13,28 @@ import { ReservationService } from '../../../core/services/reservation.service';
 })
 export class ReservationListComponent implements OnInit {
   reservations: Reservation[] = [];
+  loading = true;
 
-  constructor(private reservationService: ReservationService, private router: Router) {}
+  constructor(
+    private reservationService: ReservationService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.reservationService.getAll().subscribe(data => {
-      this.reservations = data;
+    this.reservationService.getAll().subscribe({
+      next: page => {
+        this.reservations = page.content;
+        this.loading = false;
+      },
+      error: () => this.loading = false
+    });
+  }
+
+  cancel(id: number): void {
+    if (!confirm('Deseja cancelar esta reserva?')) return;
+    this.reservationService.cancel(id).subscribe(updated => {
+      const index = this.reservations.findIndex(r => r.id === id);
+      if (index !== -1) this.reservations[index] = updated;
     });
   }
 

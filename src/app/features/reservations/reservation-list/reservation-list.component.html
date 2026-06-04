@@ -1,18 +1,29 @@
 <div class="container">
+  <div class="header">
     <h1>Minhas Reservas</h1>
-  
-    <div class="empty-state" *ngIf="reservations.length === 0">
-      <p>Nenhuma reserva encontrada.</p>
-    </div>
-  
-    <div class="reservation-card" *ngFor="let r of reservations">
+    <button class="btn-back" (click)="voltar()">← Voltar para Hotéis</button>
+  </div>
+
+  <div class="loading" *ngIf="loading">Carregando reservas...</div>
+
+  <div class="empty-state" *ngIf="!loading && reservations.length === 0">
+    <p>Nenhuma reserva encontrada.</p>
+  </div>
+
+  <div class="reservation-card" *ngFor="let r of reservations">
+    <div class="reservation-info">
       <h2>Reserva #{{ r.id }}</h2>
       <p><strong>Hóspede:</strong> {{ r.guestName }}</p>
+      <p><strong>Email:</strong> {{ r.guestEmail }}</p>
       <p><strong>Check-in:</strong> {{ r.checkIn }}</p>
       <p><strong>Check-out:</strong> {{ r.checkOut }}</p>
       <p><strong>Total:</strong> R$ {{ r.totalPrice }}</p>
-      <span class="status">{{ r.status }}</span>
     </div>
-  
-    <button (click)="voltar()">Voltar para Hotéis</button>
+    <div class="reservation-actions">
+      <span class="status" [class]="'status-' + r.status.toLowerCase()">{{ r.status }}</span>
+      <button class="btn-cancel" *ngIf="r.status !== 'CANCELLED'" (click)="cancel(r.id!)">
+        Cancelar
+      </button>
+    </div>
   </div>
+</div>

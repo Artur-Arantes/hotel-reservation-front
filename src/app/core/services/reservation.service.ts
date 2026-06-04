@@ -1,19 +1,30 @@
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Reservation } from '../models/reservation.model';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { environment } from '../../../environments/environment';
+import { Reservation, ReservationRequest, ReservationPage } from '../models/reservation.model';
 
 @Injectable({ providedIn: 'root' })
 export class ReservationService {
 
-  private reservations: Reservation[] = [];
+  private readonly apiUrl = `${environment.apiUrl}/api/reservations`;
 
-  create(reservation: Reservation): Observable<Reservation> {
-    const newReservation = { ...reservation, id: Date.now() };
-    this.reservations.push(newReservation);
-    return of(newReservation);
+  constructor(private http: HttpClient) {}
+
+  getAll(page = 0, size = 10): Observable<ReservationPage> {
+    const params = new HttpParams().set('page', page).set('size', size);
+    return this.http.get<ReservationPage>(this.apiUrl, { params });
   }
 
-  getAll(): Observable<Reservation[]> {
-    return of(this.reservations);
+  getById(id: number): Observable<Reservation> {
+    return this.http.get<Reservation>(`${this.apiUrl}/${id}`);
+  }
+
+  create(request: ReservationRequest): Observable<Reservation> {
+    return this.http.post<Reservation>(this.apiUrl, request);
+  }
+
+  cancel(id: number): Observable<Reservation> {
+    return this.http.patch<Reservation>(`${this.apiUrl}/${id}/cancel`, {});
   }
 }
