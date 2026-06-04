@@ -6,6 +6,7 @@ import { Hotel } from '../../../core/models/hotel.model';
 import { Room } from '../../../core/models/room.model';
 import { HotelService } from '../../../core/services/hotel.service';
 import { RoomService } from '../../../core/services/room.service';
+import { getHotelImage, getRoomImage } from '../../../core/utils/image.utils';
 
 @Component({
   selector: 'app-room-list',
@@ -35,6 +36,15 @@ export class RoomListComponent implements OnInit {
     this.hotelService.getById(id).subscribe(hotel => this.hotel = hotel);
   }
 
+  getHotelImage(): string {
+    if (!this.hotel) return '';
+    return getHotelImage(this.hotel.name, this.hotel.imageUrl);
+  }
+
+  getRoomImage(type: string): string {
+    return getRoomImage(type);
+  }
+
   search(): void {
     if (!this.checkIn || !this.checkOut || !this.hotel) return;
     this.loading = true;
@@ -44,15 +54,8 @@ export class RoomListComponent implements OnInit {
       checkIn: this.checkIn,
       checkOut: this.checkOut
     }).subscribe({
-      next: rooms => {
-        this.rooms = rooms;
-        this.searched = true;
-        this.loading = false;
-      },
-      error: err => {
-        this.errorMessage = err.error?.message || 'Erro ao buscar quartos.';
-        this.loading = false;
-      }
+      next: rooms => { this.rooms = rooms; this.searched = true; this.loading = false; },
+      error: err => { this.errorMessage = err.error?.message || 'Erro ao buscar quartos.'; this.loading = false; }
     });
   }
 
@@ -64,5 +67,10 @@ export class RoomListComponent implements OnInit {
 
   voltar(): void {
     this.router.navigate(['/hotels']);
+  }
+
+  get nights(): number {
+    if (!this.checkIn || !this.checkOut) return 0;
+    return Math.max(0, (new Date(this.checkOut).getTime() - new Date(this.checkIn).getTime()) / 86400000);
   }
 }

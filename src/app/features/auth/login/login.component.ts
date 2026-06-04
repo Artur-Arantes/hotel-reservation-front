@@ -37,8 +37,8 @@ export class LoginComponent {
     } else {
       this.authService.register({ name: this.name, email: this.email, password: this.password }).subscribe({
         next: () => this.router.navigate(['/hotels']),
-        error: () => {
-          this.errorMessage = 'Erro ao criar conta. Verifique os dados.';
+        error: err => {
+          this.errorMessage = err.error?.message || 'Erro ao criar conta. Verifique os dados.';
           this.loading = false;
         }
       });

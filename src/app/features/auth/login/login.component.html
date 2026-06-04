@@ -1,35 +1,36 @@
-<div class="auth-container">
-  <div class="auth-card">
-    <h1>{{ isLogin ? 'Entrar' : 'Criar Conta' }}</h1>
+<div class="page">
+  <div class="bg-image"></div>
+  <div class="overlay"></div>
+
+  <div class="form-wrap">
+    <div class="brand">
+      <span>🏨</span>
+      <span class="brand-name">Hotel Fácil</span>
+    </div>
+
+    <h2>{{ isLogin ? 'Bem-vindo de volta' : 'Crie sua conta' }}</h2>
 
     <form (ngSubmit)="submit()">
-      <div class="form-group" *ngIf="!isLogin">
-        <label>Nome</label>
-        <input type="text" [(ngModel)]="name" name="name" required placeholder="Seu nome" />
+      <div class="field" *ngIf="!isLogin">
+        <input type="text" [(ngModel)]="name" name="name" required placeholder="Nome completo" />
+      </div>
+      <div class="field">
+        <input type="email" [(ngModel)]="email" name="email" required placeholder="E-mail" />
+      </div>
+      <div class="field">
+        <input type="password" [(ngModel)]="password" name="password" required placeholder="Senha" />
       </div>
 
-      <div class="form-group">
-        <label>Email</label>
-        <input type="email" [(ngModel)]="email" name="email" required placeholder="seu@email.com" />
-      </div>
-
-      <div class="form-group">
-        <label>Senha</label>
-        <input type="password" [(ngModel)]="password" name="password" required placeholder="••••••••" />
-      </div>
-
-      <div class="error-message" *ngIf="errorMessage">
-        {{ errorMessage }}
-      </div>
+      <div class="error" *ngIf="errorMessage">{{ errorMessage }}</div>
 
       <button type="submit" [disabled]="loading">
-        {{ loading ? 'Aguarde...' : (isLogin ? 'Entrar' : 'Criar Conta') }}
+        {{ loading ? 'Aguarde...' : (isLogin ? 'Entrar' : 'Criar conta') }}
       </button>
     </form>
 
-    <p class="toggle-link">
+    <p class="toggle">
       {{ isLogin ? 'Não tem conta?' : 'Já tem conta?' }}
-      <a (click)="toggleMode()">{{ isLogin ? 'Criar conta' : 'Entrar' }}</a>
+      <a (click)="toggleMode()">{{ isLogin ? 'Cadastre-se' : 'Entrar' }}</a>
     </p>
   </div>
 </div>

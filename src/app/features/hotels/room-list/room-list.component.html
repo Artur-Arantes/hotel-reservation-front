@@ -1,43 +1,77 @@
-<div class="container">
-  <button class="btn-back" (click)="voltar()">← Voltar</button>
+<div class="page">
+  <!-- Navbar -->
+  <nav class="navbar">
+    <button class="btn-back" (click)="voltar()">← Hotéis</button>
+    <div class="navbar-brand">
+      🏨 Hotel Fácil
+    </div>
+    <div style="width: 80px"></div>
+  </nav>
 
-  <div *ngIf="hotel">
-    <h1>{{ hotel.name }}</h1>
-    <p class="hotel-location">{{ hotel.city }} - {{ hotel.state }}</p>
+  <!-- Hotel Hero -->
+  <div class="hotel-hero" *ngIf="hotel" [style.backgroundImage]="'url(' + getHotelImage() + ')'">
+    <div class="hero-overlay">
+      <div class="hero-content">
+        <p class="hero-location">📍 {{ hotel.city }}, {{ hotel.state }}</p>
+        <h1>{{ hotel.name }}</h1>
+        <p class="hero-desc" *ngIf="hotel.description">{{ hotel.description }}</p>
+      </div>
+    </div>
   </div>
 
-  <div class="search-box">
-    <h2>Verificar disponibilidade</h2>
-    <div class="date-row">
-      <div class="form-group">
-        <label>Check-in</label>
-        <input type="date" [(ngModel)]="checkIn" name="checkIn" />
+  <!-- Search -->
+  <div class="search-section">
+    <div class="search-card">
+      <h2>Verificar disponibilidade</h2>
+      <div class="search-row">
+        <div class="form-group">
+          <label>Check-in</label>
+          <input type="date" [(ngModel)]="checkIn" name="checkIn" />
+        </div>
+        <div class="form-group">
+          <label>Check-out</label>
+          <input type="date" [(ngModel)]="checkOut" name="checkOut" />
+        </div>
+        <div class="nights-badge" *ngIf="nights > 0">
+          {{ nights }} noite{{ nights > 1 ? 's' : '' }}
+        </div>
+        <button class="btn-search" (click)="search()" [disabled]="!checkIn || !checkOut || loading">
+          {{ loading ? 'Buscando...' : 'Buscar Quartos' }}
+        </button>
       </div>
-      <div class="form-group">
-        <label>Check-out</label>
-        <input type="date" [(ngModel)]="checkOut" name="checkOut" />
-      </div>
-      <button (click)="search()" [disabled]="!checkIn || !checkOut || loading">
-        {{ loading ? 'Buscando...' : 'Buscar' }}
-      </button>
+      <div class="error-msg" *ngIf="errorMessage">{{ errorMessage }}</div>
     </div>
-    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
   </div>
 
-  <div *ngIf="searched">
-    <div class="empty-state" *ngIf="rooms.length === 0">
-      <p>Nenhum quarto disponível para o período selecionado.</p>
-    </div>
-
-    <div class="room-card" *ngFor="let room of rooms">
-      <div class="room-info">
-        <h3>Quarto {{ room.roomNumber }}</h3>
-        <p>Tipo: <strong>{{ room.type }}</strong></p>
-        <p>Capacidade: <strong>{{ room.capacity }} pessoa(s)</strong></p>
+  <!-- Rooms -->
+  <div class="rooms-section" *ngIf="searched">
+    <div class="content">
+      <div class="empty-state" *ngIf="rooms.length === 0">
+        <p>😔 Nenhum quarto disponível para este período.</p>
+        <span>Tente outras datas.</span>
       </div>
-      <div class="room-action">
-        <p class="room-price">R$ {{ room.price }}/noite</p>
-        <button (click)="reserve(room)">Reservar</button>
+
+      <div class="rooms-grid" *ngIf="rooms.length > 0">
+        <div class="room-card" *ngFor="let room of rooms">
+          <div class="room-image">
+            <img [src]="getRoomImage(room.type)" [alt]="room.type" />
+            <span class="room-type-badge">{{ room.type }}</span>
+          </div>
+          <div class="room-body">
+            <div class="room-header">
+              <h3>Quarto {{ room.roomNumber }}</h3>
+              <div class="room-price">
+                <span class="price-value">R$ {{ room.price }}</span>
+                <span class="price-unit">/noite</span>
+              </div>
+            </div>
+            <div class="room-details">
+              <span class="detail-tag">👥 {{ room.capacity }} pessoa{{ room.capacity > 1 ? 's' : '' }}</span>
+              <span class="detail-tag" *ngIf="nights > 0">🌙 Total: R$ {{ room.price * nights }}</span>
+            </div>
+            <button class="btn-reserve" (click)="reserve(room)">Reservar este quarto</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

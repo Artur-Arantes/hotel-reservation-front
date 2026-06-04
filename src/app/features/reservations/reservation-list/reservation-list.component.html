@@ -1,29 +1,63 @@
-<div class="container">
-  <div class="header">
-    <h1>Minhas Reservas</h1>
-    <button class="btn-back" (click)="voltar()">← Voltar para Hotéis</button>
-  </div>
+<div class="page">
+  <nav class="navbar">
+    <button class="btn-back" (click)="voltar()">← Hotéis</button>
+    <div class="navbar-brand">🏨 Hotel Fácil</div>
+    <div style="width: 80px"></div>
+  </nav>
 
-  <div class="loading" *ngIf="loading">Carregando reservas...</div>
-
-  <div class="empty-state" *ngIf="!loading && reservations.length === 0">
-    <p>Nenhuma reserva encontrada.</p>
-  </div>
-
-  <div class="reservation-card" *ngFor="let r of reservations">
-    <div class="reservation-info">
-      <h2>Reserva #{{ r.id }}</h2>
-      <p><strong>Hóspede:</strong> {{ r.guestName }}</p>
-      <p><strong>Email:</strong> {{ r.guestEmail }}</p>
-      <p><strong>Check-in:</strong> {{ r.checkIn }}</p>
-      <p><strong>Check-out:</strong> {{ r.checkOut }}</p>
-      <p><strong>Total:</strong> R$ {{ r.totalPrice }}</p>
+  <div class="content">
+    <div class="page-header">
+      <h1>Minhas Reservas</h1>
+      <p>Acompanhe e gerencie suas reservas</p>
     </div>
-    <div class="reservation-actions">
-      <span class="status" [class]="'status-' + r.status.toLowerCase()">{{ r.status }}</span>
-      <button class="btn-cancel" *ngIf="r.status !== 'CANCELLED'" (click)="cancel(r.id!)">
-        Cancelar
-      </button>
+
+    <div class="loading" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Carregando reservas...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && reservations.length === 0">
+      <div class="empty-icon">🏨</div>
+      <h3>Nenhuma reserva ainda</h3>
+      <p>Explore nossos hotéis e faça sua primeira reserva.</p>
+      <button class="btn-explore" (click)="voltar()">Explorar Hotéis</button>
+    </div>
+
+    <div class="reservations-list" *ngIf="!loading && reservations.length > 0">
+      <div class="reservation-card" *ngFor="let r of reservations">
+        <div class="card-left">
+          <span class="status-badge" [class]="'status-' + r.status.toLowerCase()">{{ r.status }}</span>
+          <div class="reservation-id"># {{ r.id }}</div>
+        </div>
+        <div class="card-body">
+          <div class="guest-info">
+            <h3>{{ r.guestName }}</h3>
+            <span class="guest-email">{{ r.guestEmail }}</span>
+          </div>
+          <div class="stay-info">
+            <div class="stay-dates">
+              <div class="date-block">
+                <span class="date-label">Check-in</span>
+                <span class="date-val">{{ r.checkIn }}</span>
+              </div>
+              <div class="date-arrow">→</div>
+              <div class="date-block">
+                <span class="date-label">Check-out</span>
+                <span class="date-val">{{ r.checkOut }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="card-right">
+          <div class="total-price">R$ {{ r.totalPrice }}</div>
+          <button
+            class="btn-cancel"
+            *ngIf="r.status !== 'CANCELLED'"
+            (click)="cancel(r.id!)">
+            Cancelar
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>

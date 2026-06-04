@@ -1,26 +1,71 @@
-<div class="container">
-  <div class="header">
-    <h1>Hotéis Disponíveis</h1>
-    <div class="header-actions">
-      <button class="btn-secondary" (click)="verReservas()">Minhas Reservas</button>
+<div class="page">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <span class="brand-icon">🏨</span>
+      <span class="brand-name">Hotel Fácil</span>
+    </div>
+    <div class="navbar-actions">
+      <button class="btn-nav" (click)="verReservas()">Minhas Reservas</button>
       <button class="btn-logout" (click)="logout()">Sair</button>
     </div>
-  </div>
+  </nav>
 
-  <div class="loading" *ngIf="loading">Carregando hotéis...</div>
-
-  <div class="empty-state" *ngIf="!loading && hotels.length === 0">
-    <p>Nenhum hotel encontrado.</p>
-  </div>
-
-  <div class="hotel-card" *ngFor="let hotel of hotels">
-    <div class="hotel-info">
-      <h2>{{ hotel.name }}</h2>
-      <p class="hotel-location">{{ hotel.city }} - {{ hotel.state }}</p>
-      <p class="hotel-description" *ngIf="hotel.description">{{ hotel.description }}</p>
+  <!-- Hero Slideshow -->
+  <div class="hero">
+    <div class="slides">
+      <div class="slide" *ngFor="let img of feriasImages; let i = index" [class.active]="i === currentSlide">
+        <img [src]="img" alt="férias" />
+      </div>
+      <div class="hero-overlay"></div>
     </div>
-    <div class="hotel-action">
-      <button (click)="verQuartos(hotel.id)">Ver Quartos</button>
+    <div class="hero-content">
+      <p class="hero-tag">Sua próxima aventura começa aqui</p>
+      <h1>Reserve o hotel perfeito<br>para suas férias</h1>
+      <p class="hero-sub">Hotéis selecionados nas melhores cidades do Brasil</p>
+      <a class="btn-hero" href="#hoteis">Ver Hotéis ↓</a>
+    </div>
+    <div class="slide-dots">
+      <button class="dot" *ngFor="let img of feriasImages; let i = index"
+        [class.active]="i === currentSlide" (click)="goToSlide(i)"></button>
     </div>
   </div>
+
+  <!-- Hotels Section -->
+  <div class="content" id="hoteis">
+    <div class="section-header">
+      <h2>Nossos Hotéis</h2>
+      <p>Escolha o destino dos seus sonhos</p>
+    </div>
+
+    <div class="loading" *ngIf="loading">
+      <div class="spinner"></div>
+      <p>Carregando hotéis...</p>
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && hotels.length === 0">
+      <p>Nenhum hotel encontrado.</p>
+    </div>
+
+    <div class="hotels-list" *ngIf="!loading && hotels.length > 0">
+      <div class="hotel-row" *ngFor="let hotel of hotels" (click)="verQuartos(hotel.id)">
+        <div class="hotel-thumb">
+          <img [src]="getImage(hotel)" [alt]="hotel.name" />
+        </div>
+        <div class="hotel-info">
+          <div class="hotel-location">
+            <span>📍</span> {{ hotel.city }}, {{ hotel.state }}
+          </div>
+          <h3>{{ hotel.name }}</h3>
+          <p class="hotel-desc" *ngIf="hotel.description">{{ hotel.description }}</p>
+        </div>
+        <div class="hotel-action">
+          <span class="btn-ver">Ver Quartos →</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <span>🏨</span> Hotel Fácil &nbsp;·&nbsp; Todos os direitos reservados
+  </footer>
 </div>
